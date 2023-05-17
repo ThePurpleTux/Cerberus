@@ -1,17 +1,17 @@
-﻿using Ghost.Models.Tasks;
+﻿using Cerberus.Models.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class TestCommand : GhostCommand
+    public class TestCommand : CerberusCommand
     {
         public override string Name => "TestCommand";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             return "Tasking Logic is Success";
         }

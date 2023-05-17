@@ -5,10 +5,10 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Models.Tasks
+namespace Cerberus.Models.Tasks
 {
     [DataContract]
-    public class GhostTask
+    public class CerberusTask
     {
         [DataMember(Name = "id")]
         public string Id { get; set; }

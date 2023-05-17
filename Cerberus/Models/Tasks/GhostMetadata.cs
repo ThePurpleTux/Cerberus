@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Models.Tasks
+namespace Cerberus.Models.Tasks
 {
-    public class GhostMetadata
+    public class CerberusMetadata
     {
         public string Id { get; set; }
         public string Hostname { get; set; }

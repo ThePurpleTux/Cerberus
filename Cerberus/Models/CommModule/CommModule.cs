@@ -1,4 +1,4 @@
-﻿using Ghost.Models.Tasks;
+﻿using Cerberus.Models.Tasks;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -6,24 +6,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Models.CommModule
+namespace Cerberus.Models.CommModule
 {
     public abstract class CommModule
     {
         public abstract Task Start();
         public abstract void Stop();
 
-        protected GhostMetadata Metadata { get; set; }
+        protected CerberusMetadata Metadata { get; set; }
 
-        protected ConcurrentQueue<GhostTask> Inbound = new ConcurrentQueue<GhostTask>();
-        protected ConcurrentQueue<GhostTaskResult> Outbound = new ConcurrentQueue<GhostTaskResult>();
+        protected ConcurrentQueue<CerberusTask> Inbound = new ConcurrentQueue<CerberusTask>();
+        protected ConcurrentQueue<CerberusTaskResult> Outbound = new ConcurrentQueue<CerberusTaskResult>();
 
-        public virtual void Init(GhostMetadata metadata)
+        public virtual void Init(CerberusMetadata metadata)
         {
             Metadata= metadata;
         }
 
-        public bool RecvData(out IEnumerable<GhostTask> tasks)
+        public bool RecvData(out IEnumerable<CerberusTask> tasks)
         {
             if (Inbound.IsEmpty)
             {
@@ -31,7 +31,7 @@ namespace Ghost.Models.CommModule
                 return false;
             }
 
-            var list = new List<GhostTask>();
+            var list = new List<CerberusTask>();
 
             while (Inbound.TryDequeue(out var task))
             {
@@ -42,14 +42,14 @@ namespace Ghost.Models.CommModule
             return true;
         }
 
-        public void SendData(GhostTaskResult result)
+        public void SendData(CerberusTaskResult result)
         {
             Outbound.Enqueue(result);
         }
 
-        protected IEnumerable<GhostTaskResult> GetOutbound()
+        protected IEnumerable<CerberusTaskResult> GetOutbound()
         {
-            var outbound = new List<GhostTaskResult>();
+            var outbound = new List<CerberusTaskResult>();
 
             while (Outbound.TryDequeue(out var result))
             {

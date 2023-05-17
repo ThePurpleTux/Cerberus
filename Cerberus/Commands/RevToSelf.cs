@@ -1,17 +1,17 @@
-﻿using Ghost.Models.Tasks;
+﻿using Cerberus.Models.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class RevToSelf : GhostCommand
+    public class RevToSelf : CerberusCommand
     {
         public override string Name => "rev2self";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             if (Native.Advapi.RevertToSelf())
             {

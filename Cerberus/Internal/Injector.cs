@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Internal
+namespace Cerberus.Internal
 {
     public abstract class Injector
     {

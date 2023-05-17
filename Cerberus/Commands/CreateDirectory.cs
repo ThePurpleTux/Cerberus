@@ -1,4 +1,4 @@
-﻿using Ghost.Models.Tasks;
+﻿using Cerberus.Models.Tasks;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class CreateDirectory : GhostCommand
+    public class CreateDirectory : CerberusCommand
     {
         public override string Name => "mkdir";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             string path;
 

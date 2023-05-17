@@ -1,17 +1,17 @@
-﻿using Ghost.Models.Tasks;
+﻿using Cerberus.Models.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class Shell : GhostCommand
+    public class Shell : CerberusCommand
     {
         public override string Name => "shell";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             if (task.Arguments is null || task.Arguments.Length == 0)
                 return "No arguments supplied. Please supply a command to run";

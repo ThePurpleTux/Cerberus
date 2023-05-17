@@ -1,4 +1,4 @@
-﻿using Ghost.Models.Tasks;
+﻿using Cerberus.Models.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,13 +6,13 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class WhoAmI : GhostCommand
+    public class WhoAmI : CerberusCommand
     {
         public override string Name => "whoami";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             var identity = WindowsIdentity.GetCurrent();
             return identity.Name;

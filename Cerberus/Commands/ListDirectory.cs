@@ -1,16 +1,16 @@
 ﻿using Agent;
-using Ghost.Models.Tasks;
+using Cerberus.Models.Tasks;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class ListDirectory : GhostCommand
+    public class ListDirectory : CerberusCommand
     {
         public override string Name => "ls";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             var results = new SharpSploitResultList<ListDirectoryResult>();
 

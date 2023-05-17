@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Models.Tasks
+namespace Cerberus.Models.Tasks
 {
-    public abstract class GhostCommand
+    public abstract class CerberusCommand
     {
         public abstract string Name { get; }
-        public abstract string Execute(GhostTask task);
+        public abstract string Execute(CerberusTask task);
     }
 }

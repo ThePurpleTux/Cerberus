@@ -1,13 +1,13 @@
-﻿using Ghost.Internal;
-using Ghost.Models.Tasks;
+﻿using Cerberus.Internal;
+using Cerberus.Models.Tasks;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class SelfInject : GhostCommand
+    public class SelfInject : CerberusCommand
     {
         public override string Name => "self-inject";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             var injector = new SelfInjector();
             var success = injector.Inject(task.FileBytes);

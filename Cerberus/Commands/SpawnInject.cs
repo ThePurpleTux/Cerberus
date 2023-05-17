@@ -1,13 +1,13 @@
-﻿using Ghost.Internal;
-using Ghost.Models.Tasks;
+﻿using Cerberus.Internal;
+using Cerberus.Models.Tasks;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class SpawnInject : GhostCommand
+    public class SpawnInject : CerberusCommand
     {
         public override string Name => "spawn-inject";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             if (task.Arguments is null || task.Arguments.Length == 0)
                 return "No path specified. Please specify the path to the executable you want to spawn-inject into";

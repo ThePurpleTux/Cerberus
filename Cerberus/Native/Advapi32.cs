@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Ghost.Native
+namespace Cerberus.Native
 {
     public static class Advapi
     {

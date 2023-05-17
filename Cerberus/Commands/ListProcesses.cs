@@ -1,5 +1,5 @@
 ﻿using Agent;
-using Ghost.Models.Tasks;
+using Cerberus.Models.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,13 +8,13 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class ListProcesses : GhostCommand
+    public class ListProcesses : CerberusCommand
     {
         public override string Name => "ps";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             var results = new SharpSploitResultList<ListProcessesResult>();
             var processes = Process.GetProcesses();

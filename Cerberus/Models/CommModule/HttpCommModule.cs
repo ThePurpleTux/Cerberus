@@ -1,4 +1,4 @@
-﻿using Ghost.Models.Tasks;
+﻿using Cerberus.Models.Tasks;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -6,19 +6,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ghost.Models.CommModule
+namespace Cerberus.Models.CommModule
 {
     public class HttpCommModule : CommModule
     {
         public string ConnectAddress { get; set; }
         public int ConnectPort { get; set; }
         public int SleepTime { get; set; }
-        public GhostMetadata Metadata { get; set; }
+        public CerberusMetadata Metadata { get; set; }
 
         private CancellationTokenSource _cancellationTokenSource;
         private HttpClient _httpClient;
 
-        public HttpCommModule(string connectAddress, int connectPort, int sleepTime, GhostMetadata metadata)
+        public HttpCommModule(string connectAddress, int connectPort, int sleepTime, CerberusMetadata metadata)
         {
             ConnectAddress = connectAddress;
             ConnectPort = connectPort;
@@ -26,7 +26,7 @@ namespace Ghost.Models.CommModule
             Metadata = metadata;
         }
 
-        public override void Init(GhostMetadata metadata)
+        public override void Init(CerberusMetadata metadata)
         {
             base.Init(metadata);
 
@@ -79,7 +79,7 @@ namespace Ghost.Models.CommModule
 
         private void HandleResponse(byte[] response)
         {
-            var tasks = response.Deserialize<GhostTask[]>();
+            var tasks = response.Deserialize<CerberusTask[]>();
 
             if (tasks != null && tasks.Any())
             {

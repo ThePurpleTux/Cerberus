@@ -1,12 +1,12 @@
-﻿using Ghost.Models.Tasks;
+﻿using Cerberus.Models.Tasks;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class ExecuteAssembly : GhostCommand
+    public class ExecuteAssembly : CerberusCommand
     {
         public override string Name => "execute-assembly";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             return Internal.Execute.ExecuteAssembly(task.FileBytes, task.Arguments);
         }

