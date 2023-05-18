@@ -119,7 +119,7 @@ namespace Cerberus.Models.CommModule
                 tasking_size = -1,
             };
             var encodedGetTasking = Convert.ToBase64String(getTasking.Serialize());
-            var content = new StringContent(CallbackUUID + encodedGetTasking);
+            var content = new StringContent(Convert.ToBase64String(Encoding.UTF8.GetBytes(CallbackUUID)) + encodedGetTasking);
             var response = await _httpClient.PostAsync(URI,  content);
             var responseContent = await response.Content.ReadAsStringAsync();
             HandleTaskingResponse(responseContent);
