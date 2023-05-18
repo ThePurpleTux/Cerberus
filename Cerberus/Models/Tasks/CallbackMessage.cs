@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Cerberus.Models.Tasks
 {
-    public abstract class CerberusCommand
+    public class CallbackMessage
     {
-        public abstract string Name { get; }
-        public abstract string Execute(CerberusTask task);
+        public string action { get; set; }
+        public string id { get; set; }
+        public string status { get; set; }
     }
 }

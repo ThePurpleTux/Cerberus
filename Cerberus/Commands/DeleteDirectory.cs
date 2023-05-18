@@ -12,14 +12,15 @@ namespace Cerberus.Commands
     {
         public override string Name => "rmdir";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
-            if (task.Arguments is null || task.Arguments.Length == 0)
+            var Arguments = task.parameters.Split(' ');
+            if (Arguments is null || Arguments.Length == 0)
             {
                 return "No path provided";
             }
 
-            var path = task.Arguments[0];
+            var path = Arguments[0];
             Directory.Delete(path, true);
 
             if (!Directory.Exists(path))

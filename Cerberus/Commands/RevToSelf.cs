@@ -11,7 +11,7 @@ namespace Cerberus.Commands
     {
         public override string Name => "rev2self";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
             if (Native.Advapi.RevertToSelf())
             {

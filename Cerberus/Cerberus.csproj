@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{189FBD4D-99DC-420B-B406-DCAF27159BB7}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Ghost</RootNamespace>
-    <AssemblyName>Ghost</AssemblyName>
+    <RootNamespace>Cerberus</RootNamespace>
+    <AssemblyName>Cerberus</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -71,10 +71,16 @@
     <Compile Include="Internal\SpawnInjector.cs" />
     <Compile Include="Models\CommModule\CommModule.cs" />
     <Compile Include="Models\CommModule\HttpCommModule.cs" />
-    <Compile Include="Models\Tasks\GhostCommand.cs" />
-    <Compile Include="Models\Tasks\GhostMetadata.cs" />
-    <Compile Include="Models\Tasks\GhostTask.cs" />
+    <Compile Include="Models\Tasks\CallbackMessage.cs" />
+    <Compile Include="Models\Tasks\CerberusCommand.cs" />
+    <Compile Include="Models\Tasks\CerberusMetadata.cs" />
+    <Compile Include="Models\Tasks\DelegateTask.cs" />
+    <Compile Include="Models\Tasks\GetTaskingRequest.cs" />
+    <Compile Include="Models\Tasks\CerberusTask.cs" />
+    <Compile Include="Models\Tasks\GetTaskingResponse.cs" />
     <Compile Include="Models\Tasks\GhostTaskResult.cs" />
+    <Compile Include="Models\Tasks\MythicTask.cs" />
+    <Compile Include="Models\Tasks\MythicTaskResult.cs" />
     <Compile Include="Native\Advapi32.cs" />
     <Compile Include="Native\Kernel32.cs" />
     <Compile Include="Program.cs" />

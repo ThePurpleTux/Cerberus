@@ -12,18 +12,20 @@ namespace Cerberus.Models.CommModule
     {
         public abstract Task Start();
         public abstract void Stop();
+        // Make init checkin to mythic and become a callback
+        public abstract Task InitialCheckin();
 
-        protected CerberusMetadata Metadata { get; set; }
+        public CerberusMetadata Metadata { get; set; }
 
-        protected ConcurrentQueue<CerberusTask> Inbound = new ConcurrentQueue<CerberusTask>();
-        protected ConcurrentQueue<CerberusTaskResult> Outbound = new ConcurrentQueue<CerberusTaskResult>();
+        protected ConcurrentQueue<MythicTask> Inbound = new ConcurrentQueue<MythicTask>();
+        protected ConcurrentQueue<MythicTaskResult> Outbound = new ConcurrentQueue<MythicTaskResult>();
 
         public virtual void Init(CerberusMetadata metadata)
         {
             Metadata= metadata;
         }
 
-        public bool RecvData(out IEnumerable<CerberusTask> tasks)
+        public bool RecvData(out IEnumerable<MythicTask> tasks)
         {
             if (Inbound.IsEmpty)
             {
@@ -31,7 +33,7 @@ namespace Cerberus.Models.CommModule
                 return false;
             }
 
-            var list = new List<CerberusTask>();
+            var list = new List<MythicTask>();
 
             while (Inbound.TryDequeue(out var task))
             {
@@ -42,14 +44,14 @@ namespace Cerberus.Models.CommModule
             return true;
         }
 
-        public void SendData(CerberusTaskResult result)
+        public void SendData(MythicTaskResult result)
         {
             Outbound.Enqueue(result);
         }
 
-        protected IEnumerable<CerberusTaskResult> GetOutbound()
+        protected IEnumerable<MythicTaskResult> GetOutbound()
         {
-            var outbound = new List<CerberusTaskResult>();
+            var outbound = new List<MythicTaskResult>();
 
             while (Outbound.TryDequeue(out var result))
             {

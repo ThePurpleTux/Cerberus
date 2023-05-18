@@ -12,7 +12,7 @@ namespace Cerberus.Commands
     {
         public override string Name => "whoami";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
             var identity = WindowsIdentity.GetCurrent();
             return identity.Name;

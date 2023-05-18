@@ -12,7 +12,7 @@ namespace Cerberus.Commands
     {
         public override string Name => "pwd";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
             return Directory.GetCurrentDirectory();
         }

@@ -12,17 +12,18 @@ namespace Cerberus.Commands
     {
         public override string Name => "mkdir";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
+            var Arguments = task.parameters.Split(' ');
             string path;
 
-            if (task.Arguments is null || task.Arguments.Length == 0)
+            if (Arguments is null || Arguments.Length == 0)
             {
                 path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             }
             else
             {
-                path = task.Arguments[0];
+                path = Arguments[0];
             }
 
             var dirInfo = Directory.CreateDirectory(path);

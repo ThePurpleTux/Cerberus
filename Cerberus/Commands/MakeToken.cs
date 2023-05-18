@@ -12,10 +12,12 @@ namespace Cerberus.Commands
     {
         public override string Name => "make_token";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
-            var userDomain = task.Arguments[0];
-            var password = task.Arguments[1];
+            var Arguments = task.parameters.Split(' ');
+
+            var userDomain = Arguments[0];
+            var password = Arguments[1];
 
             var split = userDomain.Split('\\');
             var domain = split[0];

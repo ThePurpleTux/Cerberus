@@ -11,7 +11,7 @@ namespace Cerberus.Commands
     {
         public override string Name => "TestCommand";
 
-        public override string Execute(CerberusTask task)
+        public override string Execute(MythicTask task)
         {
             return "Tasking Logic is Success";
         }
