@@ -14,20 +14,20 @@ namespace Cerberus.Commands
 
         public override string Execute(MythicTask task)
         {
-            var Arguments = task.parameters.Split(' ');
-            string path;
+            var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<MkdirParam>();
 
-            if (Arguments is null || Arguments.Length == 0)
+            if (Arguments is null || string.IsNullOrWhiteSpace(Arguments.path))
             {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            }
-            else
-            {
-                path = Arguments[0];
+                Arguments.path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             }
 
-            var dirInfo = Directory.CreateDirectory(path);
+            var dirInfo = Directory.CreateDirectory(Arguments.path);
             return $"{dirInfo.FullName} created";
         }
+    }
+
+    public class MkdirParam
+    {
+        public string path { get; set; }
     }
 }
