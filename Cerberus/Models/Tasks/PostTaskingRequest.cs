@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cerberus.Models.Tasks
 {
-    public class GetTaskingResponse
+    public class PostTaskingRequest
     {
         public string action { get; set; }
-        public MythicTask[] tasks { get; set; }
+        public MythicTaskResult[] responses { get; set; }
     }
 }

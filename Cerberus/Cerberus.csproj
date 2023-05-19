@@ -79,8 +79,10 @@
     <Compile Include="Models\Tasks\CerberusTask.cs" />
     <Compile Include="Models\Tasks\GetTaskingResponse.cs" />
     <Compile Include="Models\Tasks\GhostTaskResult.cs" />
+    <Compile Include="Models\Tasks\MythicPostTaskingStatus.cs" />
     <Compile Include="Models\Tasks\MythicTask.cs" />
     <Compile Include="Models\Tasks\MythicTaskResult.cs" />
+    <Compile Include="Models\Tasks\PostTaskingRequest.cs" />
     <Compile Include="Native\Advapi32.cs" />
     <Compile Include="Native\Kernel32.cs" />
     <Compile Include="Program.cs" />
