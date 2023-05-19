@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Cerberus.Commands
 {
-    public class TestCommand : CerberusCommand
+    public class Exit : CerberusCommand
     {
-        public override string Name => "TestCommand";
+        public override string Name => "exit";
 
         public override string Execute(MythicTask task)
         {
-            return "Tasking Logic is Success";
+            return "Tasked agent to exit";
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Cerberus.Models.CommModule
         public abstract Task Start();
         public abstract void Stop();
         // Make init checkin to mythic and become a callback
-        public abstract Task InitialCheckin();
+        public abstract Task InitCheckin();
 
         public CerberusMetadata Metadata { get; set; }
 
