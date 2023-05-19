@@ -9,10 +9,9 @@ class MkdirArguments(TaskArguments):
             CommandParameter(
                 name="path",
                 type=ParameterType.String,
-                default_value="",
                 description="Directory to create.",
                 parameter_group_info=[ParameterGroupInfo(
-                    required=False
+                    required=True
                 )]
             )
         ]
