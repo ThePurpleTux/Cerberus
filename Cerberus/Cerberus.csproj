@@ -49,6 +49,7 @@
     <Compile Include="Commands\CreateDirectory.cs" />
     <Compile Include="Commands\DeleteDirectory.cs" />
     <Compile Include="Commands\ExecuteAssembly.cs" />
+    <Compile Include="Commands\Exit.cs" />
     <Compile Include="Commands\ListDirectory.cs" />
     <Compile Include="Commands\ListProcesses.cs" />
     <Compile Include="Commands\MakeToken.cs" />
@@ -60,7 +61,6 @@
     <Compile Include="Commands\Shell.cs" />
     <Compile Include="Commands\SpawnInject.cs" />
     <Compile Include="Commands\StealToken.cs" />
-    <Compile Include="Commands\TestCommand.cs" />
     <Compile Include="Commands\WhoAmI.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Generic.cs" />
