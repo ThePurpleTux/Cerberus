@@ -36,13 +36,14 @@ class RmdirArguments(TaskArguments):
             elif self.command_line[0] == "'" and self.command_line[-1] == "'":
                 self.command_line = self.command_line[1:-1]    
             self.add_arg("path", self.command_line)
+            self.add_arg("recurse", self.command_line)
 
 class RmdirCommand(CommandBase):
     cmd = "rmdir"
     needs_admin = False
     help_cmd = "rmdir <path> <recurse (True/False)>"
     description = "Delete <path> <recurse (True/False)>"
-    version = 1
+    version = 2
     author = "@ThePurpleTux"
     argument_class = RmdirArguments
     attackmapping = ["T1106"]
