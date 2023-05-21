@@ -19,12 +19,12 @@ namespace Cerberus
 
         private static List<CerberusCommand> _commands = new List<CerberusCommand>();
 
-        private static int SleepTime = 10000;
+        private static int SleepTime = 5000;
         private static CommunicationType _commType = CommunicationType.http;
 
         private static string serverAddress = "10.0.2.128";
         private static int serverPort = 80;
-        private static string PayloadUUID = "1fc5febc-6c83-4925-add6-f7cb8b12c5d1";
+        private static string PayloadUUID = "ab0084e7-31c6-423c-a67d-fe917f5ee3a6";
         private static string UUID = "";
         private string killdate = "";
 

