@@ -55,6 +55,7 @@ class RmdirCommand(CommandBase):
             Success=True,
         )
         response.DisplayParams = taskData.args.get_arg("path")
+        response.DisplayParams = taskData.args.get_arg("recurse")
         return response
     
     async def process_response(self, task: PTTaskMessageAllData, response: any) -> PTTaskProcessResponseMessageResponse:
