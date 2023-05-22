@@ -26,8 +26,8 @@ class RmdirArguments(TaskArguments):
         ]
 
     async def parse_arguments(self):
-        # if len(self.command_line) == 0:
-        #     raise Exception("Requires path to directory you want to move to. \nUsage: {}".format(CdCommand.help_cmd))
+        if len(self.command_line) == 0:
+            raise Exception("Requires path to directory you want to move to. \nUsage: {}".format(CdCommand.help_cmd))
         if self.command_line[0] == "{":
             self.load_args_from_json_string(self.command_line)
         else:
