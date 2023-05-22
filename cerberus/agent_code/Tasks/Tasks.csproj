@@ -58,6 +58,7 @@
     <Compile Include="Commands\SpawnInject.cs" />
     <Compile Include="Commands\StealToken.cs" />
     <Compile Include="Commands\WhoAmI.cs" />
+    <Compile Include="Execute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,9 +66,9 @@
       <Project>{41e7ea2e-5c3f-47f8-af72-e1a2fe49c60e}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Internal\Internal.csproj">
-      <Project>{3743497b-b49e-47ee-b513-dd89f3ec9290}</Project>
-      <Name>Internal</Name>
+    <ProjectReference Include="..\Injection\Injection.csproj">
+      <Project>{7f531233-8038-4c20-8105-4b4019c01fb1}</Project>
+      <Name>Injection</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{7b130351-72d1-4e6f-b4e9-09e71c422f75}</Project>

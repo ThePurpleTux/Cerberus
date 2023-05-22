@@ -1,6 +1,6 @@
 ﻿using Models.Tasks;
 
-namespace Internal
+namespace Injection
 {
     public class RemoteInject : CerberusCommand
     {
