@@ -14,6 +14,7 @@ namespace Tasks.Commands
         public override string Execute(MythicTask task)
         {
             var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<RmdirParam>();
+            
 
             if (Arguments is null || Arguments.path is null)
             {
@@ -27,7 +28,7 @@ namespace Tasks.Commands
                 return $"{Arguments.path} deleted";
             }
 
-            return $"Failed to delete {Arguments.path}";
+            return $"Failed to delete {Arguments.path}"; 
         }
     }
 

