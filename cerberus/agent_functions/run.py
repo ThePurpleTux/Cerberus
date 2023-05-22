@@ -21,7 +21,7 @@ class RunArguments(TaskArguments):
                 name="arguments",
                 cli_name="Arguments",
                 display_name="Arguments",
-                type=ParameterType.string,
+                type=ParameterType.String,
                 default_value="",
                 description="[optional] Arguments",
                 parameter_group_info=[ParameterGroupInfo(
