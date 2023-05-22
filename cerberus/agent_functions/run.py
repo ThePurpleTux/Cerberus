@@ -40,7 +40,7 @@ class RunArguments(TaskArguments):
         else:
             parts = self.command_line[0].split(" ", 1)
             self.add_arg("binary", parts[0])
-            if (len parts > 1):
+            if (len(parts) > 1):
                 self.add_arg("arguments", parts[1])
 
 class RunCommand(CommandBase):
