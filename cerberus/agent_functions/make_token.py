@@ -52,7 +52,7 @@ class MakeTokenCommand(CommandBase):
     argument_class = MakeTokenArguments
     attackmapping = ["T1106", "T1218", "T1553"]
     attributes = CommandAttributes(
-        suggested_command=True
+        suggested_command=False
     )
 
 
