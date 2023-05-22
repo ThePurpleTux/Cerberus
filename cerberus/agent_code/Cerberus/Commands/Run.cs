@@ -15,16 +15,16 @@ namespace Cerberus.Commands
         {
             var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<RunParam>();
 
-            if (Arguments is null || Arguments.file is null)
+            if (Arguments is null || Arguments.binary is null)
                 return "No arguments supplied. Must supply file to execute and any required arguments";
 
-            return Internal.Execute.ExecuteCommand(Arguments.file, Arguments.args);
+            return Internal.Execute.ExecuteCommand(Arguments.binary, Arguments.arguments);
         }
     }
 
     public class RunParam
     {
-        public string file { get; set; }
-        public string args { get; set; }
+        public string binary { get; set; }
+        public string arguments { get; set; }
     }
 }
