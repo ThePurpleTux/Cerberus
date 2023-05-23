@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace HttpModule
 {
     public class HttpCommModule : CommModule
@@ -163,7 +164,7 @@ namespace HttpModule
             {
                 foreach (var task in tasks)
                 {
-                    Inbound.Enqueue(task);
+                    TaskHandler.TaskHandler.Inbound.Enqueue(task);
 
                     if (task.command.Equals("exit"))
                     {

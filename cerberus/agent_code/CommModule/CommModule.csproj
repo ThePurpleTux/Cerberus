@@ -49,6 +49,10 @@
       <Project>{7b130351-72d1-4e6f-b4e9-09e71c422f75}</Project>
       <Name>Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TaskHandler\TaskHandler.csproj">
+      <Project>{E0EB76FC-B899-4C75-A870-0A26586D8767}</Project>
+      <Name>TaskHandler</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
