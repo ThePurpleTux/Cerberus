@@ -1,7 +1,7 @@
 from mythic_container.MythicCommandBase import *
 import json
 
-class MakeTokenArguments(TaskArguments):
+class StealTokenArguments(TaskArguments):
 
     def __init__(self, command_line, **kwargs):
         super().__init__(command_line, **kwargs)
