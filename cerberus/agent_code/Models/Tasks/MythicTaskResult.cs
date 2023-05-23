@@ -14,5 +14,6 @@ namespace Models.Tasks
         public bool completed { get; set; }
         public string status { get; set; }
         public string error { get; set; } = null;
+        public int token_id { get; set; } = 0;
     }
 }

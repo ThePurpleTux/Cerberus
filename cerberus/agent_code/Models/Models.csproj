@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Managers\IManager.cs" />
+    <Compile Include="Managers\MythicTokenEntry.cs" />
+    <Compile Include="Managers\MythicCallbackTokenRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\CallbackMessage.cs" />
     <Compile Include="Tasks\CerberusCommand.cs" />

