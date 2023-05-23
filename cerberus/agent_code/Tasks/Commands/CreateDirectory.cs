@@ -12,18 +12,41 @@ namespace Tasks.Commands
     {
         public override string Name => "mkdir";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
             var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<MkdirParam>();
+            MythicTaskResult result;
 
             if (Arguments is null || string.IsNullOrWhiteSpace(Arguments.path))
             {
                 Arguments.path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             }
 
-            var dirInfo = Directory.CreateDirectory(Arguments.path);
+            try
+            {
+                var dirInfo = Directory.CreateDirectory(Arguments.path);
 
-            return $"{dirInfo.FullName} created";
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = $"{dirInfo.FullName} created",
+                    completed = true,
+                    status = "success",
+                };
+            }
+            catch(Exception ex)
+            {
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = ex.Message,
+                    completed = true,
+                    status = "Error",
+                    error = ex.Message
+                };
+            }
+
+            return result;
         }
     }
 

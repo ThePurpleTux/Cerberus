@@ -6,14 +6,33 @@ namespace Tasks.Commands
     {
         public override string Name => "rev2self";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
+            MythicTaskResult result;
+
             if (Native.Advapi.RevertToSelf())
             {
-                return "Reverted to self";
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = "Reverted to self",
+                    completed = true,
+                    status = "success"
+                };
+
+                return result;
             }
 
-            return "Failed to revert";
+            result = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = "Failed to revert",
+                completed = true,
+                status = "Error",
+                error = "Failed to revert"
+            };
+
+            return result;
         }
     }
 }

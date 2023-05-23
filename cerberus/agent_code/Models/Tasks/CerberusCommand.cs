@@ -9,6 +9,6 @@ namespace Models.Tasks
     public abstract class CerberusCommand
     {
         public abstract string Name { get; }
-        public abstract string Execute(MythicTask task);
+        public abstract MythicTaskResult Execute(MythicTask task);
     }
 }

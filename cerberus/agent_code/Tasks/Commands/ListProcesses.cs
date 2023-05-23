@@ -13,8 +13,10 @@ namespace Tasks.Commands
     {
         public override string Name => "ps";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
+            MythicTaskResult taskResult;
+
             var results = new SharpSploitResultList<ListProcessesResult>();
             var processes = Process.GetProcesses();
 
@@ -34,7 +36,15 @@ namespace Tasks.Commands
                 results.Add(result);
             }
 
-            return results.ToString();
+            taskResult = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = results.ToString(),
+                completed = true,
+                status = "success"
+            };
+
+            return taskResult;
         }
 
         private string GetProcessArch(Process process)

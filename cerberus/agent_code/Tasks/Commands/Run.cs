@@ -10,14 +10,35 @@ namespace Tasks.Commands
     {
         public override string Name => "run";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
+            MythicTaskResult result;
+
             var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<RunParam>();
 
             if (Arguments is null || Arguments.binary is null)
-                return "No arguments supplied. Must supply file to execute and any required arguments";
+            {
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = "No arguments supplied. Must supply file to execute and any required arguments",
+                    completed = true,
+                    status = "Error",
+                    error = "No arguments supplied. Must supply file to execute and any required arguments"
+                };
 
-            return Internal.Execute.ExecuteCommand(Arguments.binary, Arguments.arguments);
+                return result;
+            }
+
+            result = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = Internal.Execute.ExecuteCommand(Arguments.binary, Arguments.arguments),
+                completed = true,
+                status = "success"
+            };
+
+            return result;
         }
     }
 

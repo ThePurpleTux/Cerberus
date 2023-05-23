@@ -12,5 +12,7 @@ namespace Models.Tasks
         public string task_id { get; set; }
         public string user_output { get; set; }
         public bool completed { get; set; }
+        public string status { get; set; }
+        public string error { get; set; } = null;
     }
 }

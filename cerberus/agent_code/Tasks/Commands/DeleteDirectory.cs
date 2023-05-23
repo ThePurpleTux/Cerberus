@@ -11,24 +11,51 @@ namespace Tasks.Commands
     {
         public override string Name => "rmdir";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
             var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<RmdirParam>();
+            MythicTaskResult result;
             
 
             if (Arguments is null || Arguments.path is null)
             {
-                return "No path provided";
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = "No path provided",
+                    completed = true,
+                    status = "Error",
+                    error = "No path provided"
+                };
+
+                return result;
             }
 
             Directory.Delete(Arguments.path, Arguments.recurse);
 
             if (!Directory.Exists(Arguments.path))
             {
-                return $"{Arguments.path} deleted";
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = $"{Arguments.path} deleted",
+                    completed = true,
+                    status = "success"
+                };
+
+                return result;
             }
 
-            return $"Failed to delete {Arguments.path}"; 
+            result = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = $"Failed to delete {Arguments.path}",
+                completed = true,
+                status = "Error",
+                error = $"Failed to delete {Arguments.path}"
+            };
+
+            return result; 
         }
     }
 

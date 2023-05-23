@@ -8,10 +8,21 @@ namespace Tasks.Commands
     {
         public override string Name => "whoami";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
             var identity = WindowsIdentity.GetCurrent();
-            return identity.Name;
+
+            var result = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = identity.Name,
+                completed = true,
+                status = "success"
+            };
+
+            identity.Dispose();
+
+            return result;
         }
     }
 }

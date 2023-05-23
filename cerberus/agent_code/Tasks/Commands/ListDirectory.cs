@@ -14,10 +14,11 @@ namespace Tasks.Commands
     {
         public override string Name => "ls";
 
-        public override string Execute(MythicTask task)
+        public override MythicTaskResult Execute(MythicTask task)
         {
             var results = new SharpSploitResultList<ListDirectoryResult>();
             var Arguments = Encoding.UTF8.GetBytes(task.parameters).Deserialize<LsParam>();
+            MythicTaskResult result;
 
             if (Arguments is null || string.IsNullOrWhiteSpace(Arguments.path))
             {
@@ -48,7 +49,15 @@ namespace Tasks.Commands
                 });
             }
 
-            return results.ToString();
+            result = new MythicTaskResult
+            {
+                task_id = task.id,
+                user_output = results.ToString(),
+                completed = true,
+                status = "success"
+            };
+
+            return result;
         }
 
         public sealed class ListDirectoryResult : SharpSploitResult

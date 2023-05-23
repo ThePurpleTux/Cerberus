@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{529563D5-0648-4952-8AD1-DF3650D67EDF}</ProjectGuid>
+    <ProjectGuid>{CFEAEF02-F533-4FD5-A9BA-0B28D38062DC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tasks</RootNamespace>
-    <AssemblyName>Tasks</AssemblyName>
+    <RootNamespace>Managers</RootNamespace>
+    <AssemblyName>Managers</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,46 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\ChangeDirectory.cs" />
-    <Compile Include="Commands\CreateDirectory.cs" />
-    <Compile Include="Commands\DeleteDirectory.cs" />
-    <Compile Include="Commands\ExecuteAssembly.cs" />
-    <Compile Include="Commands\Exit.cs" />
-    <Compile Include="Commands\ListDirectory.cs" />
-    <Compile Include="Commands\ListProcesses.cs" />
-    <Compile Include="Commands\MakeToken.cs" />
-    <Compile Include="Commands\PrintWorkingDirectory.cs" />
-    <Compile Include="Commands\RemoteInject.cs" />
-    <Compile Include="Commands\RevToSelf.cs" />
-    <Compile Include="Commands\Run.cs" />
-    <Compile Include="Commands\SelfInject.cs" />
-    <Compile Include="Commands\Shell.cs" />
-    <Compile Include="Commands\SpawnInject.cs" />
-    <Compile Include="Commands\StealToken.cs" />
-    <Compile Include="Commands\WhoAmI.cs" />
-    <Compile Include="Execute.cs" />
+    <Compile Include="IOManager.cs" />
+    <Compile Include="IdentityManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Extensions\Extensions.csproj">
-      <Project>{41e7ea2e-5c3f-47f8-af72-e1a2fe49c60e}</Project>
-      <Name>Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Injection\Injection.csproj">
-      <Project>{7f531233-8038-4c20-8105-4b4019c01fb1}</Project>
-      <Name>Injection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Managers\Managers.csproj">
-      <Project>{cfeaef02-f533-4fd5-a9ba-0b28d38062dc}</Project>
-      <Name>Managers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{7b130351-72d1-4e6f-b4e9-09e71c422f75}</Project>
       <Name>Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Native\Native.csproj">
-      <Project>{ee30122e-921f-4afb-9345-9260af5e0a3b}</Project>
-      <Name>Native</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
