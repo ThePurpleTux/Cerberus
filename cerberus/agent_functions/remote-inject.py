@@ -48,7 +48,7 @@ class RemoteInjectCommand(CommandBase):
     description = "Inject shellcode into a remote process. \nShellcode is supplied as a B64 encoded string"
     version = 1
     author = "@ThePurpleTux"
-    argument_class = SelfInjectArguments
+    argument_class = RemoteInjectArguments
     attackmapping = ["T1106", "T1218", "T1553"]
     attributes = CommandAttributes(
         suggested_command=False
