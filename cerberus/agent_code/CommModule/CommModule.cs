@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Tasking;
 
 namespace CommModuleBase
 {
@@ -15,6 +15,11 @@ namespace CommModuleBase
         public abstract void Stop();
         // Make init checkin to mythic and become a callback
         public abstract Task InitCheckin();
+
+        public abstract Task GetTasking();
+        public abstract Task SendTaskResults();
+        public abstract void HandleTaskingResponse(string response);
+        public abstract void HandleFinalResponse(string response);
 
         public CerberusMetadata Metadata { get; set; }
 
@@ -26,7 +31,7 @@ namespace CommModuleBase
             Metadata= metadata;
         }
 
-        public bool RecvData(out IEnumerable<MythicTask> tasks)
+        /*public bool RecvData(out IEnumerable<MythicTask> tasks)
         {
             if (Inbound.IsEmpty)
             {
@@ -60,6 +65,6 @@ namespace CommModuleBase
             }
 
             return outbound;
-        }
+        }*/
     }
 }

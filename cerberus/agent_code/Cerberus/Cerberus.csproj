@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -71,6 +72,10 @@
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{7b130351-72d1-4e6f-b4e9-09e71c422f75}</Project>
       <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskHandler\TaskHandler.csproj">
+      <Project>{E0EB76FC-B899-4C75-A870-0A26586D8767}</Project>
+      <Name>TaskHandler</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tasks\Tasks.csproj">
       <Project>{529563d5-0648-4952-8ad1-df3650d67edf}</Project>

