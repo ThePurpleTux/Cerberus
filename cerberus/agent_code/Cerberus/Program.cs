@@ -31,7 +31,7 @@ namespace Cerberus
         // http params
         private static string URI = Config.URI;
         private static string UserAgent = Config.UserAgent;
-        private static string HostHeader = Config.HostHeader;
+        private static string HostHeader;
 
         private static string PayloadUUID = Config.PayloadUUID;
         private static string UUID = "";
@@ -58,6 +58,11 @@ namespace Cerberus
 
             GenerateMetadata();
             _taskHandler.Init();
+
+            if (Config.HostHeader != null)
+            {
+                HostHeader = Config.HostHeader;
+            }
 
             _commModule = new HttpCommModule(serverAddress, serverPort, SleepTime, _metadata, PayloadUUID, URI, UserAgent, HostHeader);
             _commModule.Init(_metadata);
