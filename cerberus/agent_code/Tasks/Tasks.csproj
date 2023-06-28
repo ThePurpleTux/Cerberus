@@ -62,6 +62,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dinvoke\Dinvoke.csproj">
+      <Project>{281ed51a-4e04-44a4-8736-83dacf28bb6d}</Project>
+      <Name>Dinvoke</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Extensions\Extensions.csproj">
       <Project>{41e7ea2e-5c3f-47f8-af72-e1a2fe49c60e}</Project>
       <Name>Extensions</Name>
