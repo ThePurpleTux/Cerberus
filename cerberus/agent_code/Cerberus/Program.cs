@@ -40,12 +40,6 @@ namespace Cerberus
 
         
 
-        
-
-
-
-
-
         static void Main(string[] args)
         {
             //Thread.Sleep(5000);
@@ -72,8 +66,6 @@ namespace Cerberus
             UUID = _commModule.Metadata.uuid;
 
             
-            
-
             _cancellationTokenSource = new CancellationTokenSource();
 
             while (!_cancellationTokenSource.IsCancellationRequested)
